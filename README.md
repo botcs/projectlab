@@ -1,6 +1,6 @@
 # Önlab vázlat:
 
-##  Bevezetés
+##  Bevezetés / célkitűzés
  - pitvarfibrilláció társadalmi helyzete
  - pitvarfibrilláció mechanizmusa (segéd videó [Atrial Fibrillation Animation](https://www.youtube.com/watch?v=tPqs4xKPG3A))
  - korábbi megközelítések
@@ -29,15 +29,20 @@
     - Legjobb eredmény
     - Legjobb modell által kiválogatott feature-ök (esetleg DeConv)
 
+## Mérési eredmények
+
+- összegzés
+- kitekintés
+
 # FÖT vázlat:
 
-## Bevezetés
+## Bevezetés / célkitűzés
  - Deep Learning modellek alkalmazása
  - Lehetséges implementációk
  - Leggyakrabban előforduló mintázatok
 
 ## Olvasmányok
- - Források, ahonnan a hatékonyság növelésére tesznek javaslatokat
+ - Források, ahol a hatékonyság növelésére tesznek javaslatokat
 
 ## Saját munka
  - Kutatócsoport kísérleteihez a keretrendszer kiépítése
@@ -49,3 +54,8 @@
      - TensorFlow lfilter és filtfilt operáció implementálása
  - Egyszerre több GPU igénybevétele párhuzamos kísérletekkel
  - Real-Time Inference rendszer kiépítése
+
+## Mérési eredmények
+
+- összegzés
+- kitekintés
