@@ -25,16 +25,15 @@
     - Confusion Matrix
     - Data Augmentation
     - Weighted Loss
- - Eredmények
-    - Páronkénti összehasonlítás
-    - Test/Validation Set
-    - Legjobb eredmény
-    - Legjobb modell által kiválogatott feature-ök (esetleg DeConv)
-    - DeConv helyett lehetne ArgMax keresés
+
 
 ## Mérési eredmények
-
-- összegzés
+- Eredmények
+   - Páronkénti összehasonlítás
+   - Test/Validation Set
+   - Legjobb eredmény
+   - Legjobb modell által kiválogatott feature-ök (esetleg DeConv)
+   - DeConv helyett lehetne ArgMax keresés
 - kitekintés
 
 # FÖT vázlat:
