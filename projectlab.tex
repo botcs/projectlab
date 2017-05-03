@@ -1,0 +1,142 @@
+%\documentclass[fontsize=11pt, appendixprefix=true]{scrreprt}
+\documentclass[11pt]{report}
+\usepackage{tocloft}
+%\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
+%\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % for content
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % for sections, if you really want! (It is default in report and book class (So you may not need it).
+
+% appendixprefix: hogy odaírja, hogy "Függelék A", ne csak "A"
+%\usepackage[english, magyar]{babel}                        % nyelvi csomag
+\usepackage[T1]{fontenc}                                   % ékezetes betűknél is legyen automatikus elválasztás
+\usepackage[utf8]{inputenc}                                % ékezetes betűk kezelése
+%\usepackage{lmodern}                                       % alapértelmezett betűtípus ne legyen pixeles
+%\usepackage{mathtools}                                     % képletekhez kell
+\usepackage[backend=biber, sorting=anyt]{biblatex}           % bibliográfia
+\usepackage{parskip}
+\addbibresource{projectlab.bib}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}                                      % képek beszúrása
+%\usepackage{subcaption}
+\usepackage{subfig}
+\graphicspath{ {images/} }
+\usepackage[export]{adjustbox}                             % ez az ITK logó pozicionálásához kell
+\usepackage[margin=2.5cm, bindingoffset=1.25cm]{geometry}  % margók
+\usepackage[onehalfspacing]{setspace}                      % másfeles sorköz
+\usepackage[hidelinks, unicode, pdfusetitle]{hyperref}     % kattintható tartalomjegyzék és hivatkozások
+\usepackage{bookmark}                                      % PDF könyvjelzők
+\usepackage{csquotes}                                      % a bibliográfiában megfelelően legyenek formázva az idézőjelek
+\DeclareQuoteAlias{german}{magyar}
+\usepackage{blindtext} %mer mért ne?
+% Kódrészletekhez ajánlom
+\usepackage{listings, scrhack}
+%\usepackage{sourcecodepro} % egy jó betűtípus
+\lstset{captionpos=b, numberbychapter=false, basicstyle=\ttfamily, showstringspaces=false, columns=fullflexible}
+% Kódrészletek magyar stílusú számozása
+%\renewcommand\lstlistingname{kódrészlet}
+%\makeatletter
+%\renewcommand\fnum@lstlisting{\ifx\lst@@caption\@empty\else\thelstlisting.~\fi\lstlistingname}%
+%\makeatother
+% Nyilatkozathoz két parancs definíciója
+\newcommand{\pushtobottom}{\vspace*{\fill}}
+\newcommand{\signatureline}[1]{\begin{flushright}
+	\vspace*{.5cm}\par\noindent\makebox[2.5in]{\hrulefill}
+	\par\noindent\makebox[2.5in][c]{#1}
+	\end{flushright}
+}
+
+% reference
+%\usepackage[plain]{fancyref}
+%\usepackage[english, nameinlink]{cleveref}
+
+%formázás
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+%\fancyhead[L]{\leftmark}
+\fancyhead[L]{\textsl{\rightmark}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{.001cm}
+
+% Ezeket írd át!
+\author{Csaba Botos}
+\title{
+AF Classification from a short single lead ECG recording:\\
+the PhysioNet/Computing in Cardiology Challenge 2017
+}
+\date{2016}
+
+\usepackage{titlesec}
+
+% Chapter customization
+\renewcommand\thesection{\arabic{section}}
+\setcounter{secnumdepth}{2}
+
+\titleformat{\chapter}[block]
+  {\normalfont\Huge\bfseries}{\thechapter.}{1em}{\huge}
+%\titleformat{\subsection}[block]
+
+% For quotes
+\usepackage{epigraph}
+\setlength\epigraphwidth{0.7\textwidth}
+\setlength\epigraphrule{0pt}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEVEZETÉS
+
+\includegraphics[valign=m]{ITK_logo} \parbox[c]{\textwidth}{
+Pázmány Péter Catholic University\\
+Faculty of Information Technology and Bionics}
+\vspace*{\fill}
+
+{\let\newpage\relax\maketitle}
+\vspace*{\fill}
+\begin{center}
+A review submitted in partial satisfaction of the requirements of Individual
+laboratory
+\bigskip
+
+Advisor: PhD.\ István Z. Reguly \\
+\end{center}
+\clearpage
+
+
+\pagenumbering{Roman}
+\chapter*{Abstract}
+\input{content/abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\pagenumbering{arabic}
+\input{content/introduction}
+%% BEVEZETÉS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TARTALOM
+\input{content/related}
+\input{content/models}
+\input{content/evaluation}
+\input{content/results}
+\clearpage
+
+%% TARTALOM
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% BEFEJEZÉS
+
+\clearpage
+\input{content/summary}
+\input{content/future}
+\clearpage
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of Figures}
+\clearpage
+
+\printbibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+\clearpage
+%% BEFEJEZÉS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

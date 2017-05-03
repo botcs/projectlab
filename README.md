@@ -9,11 +9,13 @@
 ## Korábbi munkák (related works)
  - Elváltozás jellegzetességek orvosi szemmel
  - Feature extraction (Pan Tompkins)
+ - Frekvencia analízis
  - Clusterezés
  - Machine Learning alapú megközelítések
  - Time-series classification általában
 
 ## Saját munka
+ - Human error in ground truth
  - Klasszifikáló modellek tesztelése
     - Recurrent -> LSTM/GRU
     - FullyConnected
@@ -28,6 +30,7 @@
     - Test/Validation Set
     - Legjobb eredmény
     - Legjobb modell által kiválogatott feature-ök (esetleg DeConv)
+    - DeConv helyett lehetne ArgMax keresés
 
 ## Mérési eredmények
 

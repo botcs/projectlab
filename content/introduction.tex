@@ -1,0 +1,115 @@
+\chapter{Introduction}
+\section{Overview}
+
+
+\epigraph{\textit{No one knows what the right algorithm is, but it gives us hope that if we can discover some crude approximation of whatever this algorithm is and implement it on a computer, that can help us make a lot of progress.}}{\rightline{{\rm --- Andrew Ng}}}
+
+Every time we are interacting with our environment, we get closer to understanding it. %still the closer we are the less we understand. 
+However, as a byproduct, further questions arise, for which pure logical (or mathematical) solution is not available, or the problem is larger than what we can solve.
+Luckily we can always turn back to nature for inspiration: biological systems have proven their efficiency, therefore their functions are worth to be further analyzed -- even if there could be theoretically a better way to tackle obstacles. 
+One of the many branches of artificial intelligence, Neural Networks are based on the nervous systems of living organisms which is capable of self-learning.
+
+Such a simple paradigm is playing a fundamental role in boosting 
+industry and research of today, because introducing Machine Learning to many fields of life seems to results in great leap forward. 
+Thanks to the recent technological advancements, even with the current computational capacity of a personal computer one can get encouraging results by simply exploring the core principles of the topic. 
+
+In this work I provide a detailed explanation of each step of building a library,
+which is capable of reproducing current results of scientific researches.
+Also present applications which were made with my own library and case studies in which I have achieved unique results.
+Finally I propose the main innovation of my recent work: a simple algorithm for visualizing the \textbf{perceptive field} of each layer in a feed-forward network.
+
+\paragraph{Primary goal.} With my work I intend to bring closer, and demystify cutting-edge concepts of applied neural networkings for larger audiences. 
+On related works and case studies I want to show what can be done by simply going back to the drawing board
+
+\clearpage
+\section{Related Works and Literature}
+
+\paragraph{Main motivation.} By using external libraries \cite{TF, torch, caffe}, without diving deep into mathematical proofs, and treating neural networks as black-boxes, thousands of useful applications \cite{haykin2004comprehensive} are made. 
+On the other hand, building such architectures from the very basics helps to clarify how simple units might be organized~\cite{milo2002network}, taught \cite{werbos1994roots}, and function \cite{hornik1989multilayer} as a large system. 
+As complexity arises, the processes in the network becomes unclear and brings the question: what is the purpose of each node? 
+Methods to visualize how activation patterns formulate, and what information is held within them has been already investigated \cite{yosinski2015understanding}, and applied to improve performance \cite{zeiler2014visualizing}. 
+My studies mainly rely on recent publications, and research in field of computer vision. The design of my own Deep Learning framework library is influenced by off-the-press tutorials \cite{Goodfellow-et-al-2016-Book, deeplearningdotnet, nnsdl, stanfordlectures, gibiansky} and open-source libraries \cite{TF, torch, caffe} available to anyone.
+
+Considering course slides \cite{stanfordlectures, oxfordlectures} and textbooks \cite{Goodfellow-et-al-2016-Book, werbos1994roots, bengio2009learning} of established universities, popular websites \cite{deeplearningdotnet, pedregosa2011scikit}, 
+articles \cite{lecun2015deep}, blogs \cite{gibiansky, karpathyblog} and vlogs \cite{vlog1} on Artificial Neural Networks one might find it hard to find a good point to start. 
+Some content may offer formal description of the general machine learning problem, others try to clarify through analogies with the biological nerve system.
+Tutorials, which I have found interesting, and the most helpful, had several common features which are important to adapt, when designing a neural network library.
+Generally these common attributes are the following: 
+they intend to be \emph{simple} as possible, 
+have many \emph{intuitive} examples and analogies,
+their \emph{interpretations} are not restricted to either universal approximators, 
+or nervous systems of living organisms, but combines both aspect.
+
+I have written the first implementation based on chapters of \cite{nnsdl}. 
+What I have understood is the basic forward- and back-propagation \cite{werbos1994roots} concept of neural networks.
+Since I was struggling to understand the coding tricks that the author involved 
+I could not extend the source to any problem.
+I decided to work out the mathematical formulation, to re-implement feed-forward networks from the beginning.
+Reading a practical guide~\cite{karpathyblog} pointed out how can we represent \emph{gradient flow}, \emph{computational graphs} in a simple way.
+His style of explaining complex theoretical concepts through very clear examples motivated me to
+write my own guide which covers those parts that I was missing from the literature mentioned above.
+
+When the library was working, the next step was writing demo applications, in which I have experimented with hyper-parameters.
+These applications were based on \emph{Browser demos} of \cite{convnetjs}.
+In this work only two of them is present, which are related to visualization.
+Later I was experimenting with different methods of revealing the \emph{perceptive field}.
+In \cite{breakingclass} I learned about how modern networks can be fooled with \emph{adversarial samples} which referred to \cite{goodfellow2014explaining} and \cite{nguyen2015deep}. 
+Further investigation in the area revealed basic methods on understanding how each neuron works in a network \cite{yosinski2015understanding}.
+I was inspired to develop my own algorithm while I was studying the novel architecture of DeconvNets \cite{zeiler2014visualizing}.
+
+\clearpage
+\section{Thesis outline and contributions}
+In this work I summarize my recent studies on Neural Networks and Computer 
+Vision. 
+I present my current achievements in the field, the visualization 
+techniques I have derived and developed from the latest 
+self-educational sources and novel research.
+I also provide a guide on how to build a library \textbf{from scratch} 
+which I used for producing the present results.
+
+
+In Chapter \textbf{\nameref{cp:design}} I explain the overall structure of the library and the considerations which led to them, and provide a detailed explanation on how I 
+derived the main concepts of neural networks, from the very beginning supported with mathematical background. 
+First I zoom in from a larger picture of working AI to exact challenges of 
+Machine Learning: I disassemble neural networks in general, to basic 
+building blocks, explain them through several examples and provide a 
+formal mathematical definition which will be used in the following 
+sections.
+I put emphasis on linking the formal definitions to natural meanings of 
+mathematical formulas (throughout rather informal explanations).
+By providing intuitive theoretical considerations, from the perceptron 
+model, I build up step-by-step the entire idea of \emph{Forward- \& 
+Back-propagation} of Deep Neural Networks.
+In the end, exact layers are described involving examples of practical applications.
+
+In \textbf{\nameref{cp:results}}, I describe my research on 
+visualization techniques via elementary case studies of \emph{Voice 
+Recognition} and \emph{Image Classification}.
+In the first half I summarize the main concepts and capabilities of single 
+layered neural networks.
+I start with the basic problems of voice recognition, namely the 
+overlapping frequency domains, the irrelevant signals (noise) by training 
+networks on pure sinusoid input samples.
+I provide examples for the problem of overfitting and show how regularization techniques enhances the network performance.
+After clarification, I explain the challenges of the voice recognition topic involving real recordings,
+a case study that can be carried out at home by anyone, with the knowledge 
+provided by my work.
+In the second half, I show how feed-forward networks can be better understood via visualization with a simple algorithm, namely the \emph{Gradient Ascent}, which I have developed based on my previous studies of novel articles.
+I have also explored the hyper-parameter space of fully connected architectures,
+while training networks on the popular MNIST dataset.
+I present my experiments with different shape of layers and methods for training, and share my interpretations of the results.
+In the end an exhaustive investigation of different types of Gradient Ascent can be found involving research of revealing perceptive field of neuron each neuron in a given layer and generating adversarial samples from any kind of input which can be used for harnessing the network.
+
+Finally, in the last chapters I summarize the research I have done so far and discuss the path forward.
+
+
+
+
+
+%
+%\section*{Biological Motivation}
+%\section*{Real Life Applications}
+%\section*{Black Box representation}
+%\section{The Perceptron model}
+%\section{Importance of understanding}
+%\section{Visualization}
