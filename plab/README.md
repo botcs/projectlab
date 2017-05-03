@@ -10,7 +10,7 @@
  - Elváltozás jellegzetességek orvosi szemmel
  - Feature extraction (Pan Tompkins)
  - Frekvencia analízis
- - Clusterezés
+ - Clusterezés (HEXBIN PLOT BPM vs Class)
  - Machine Learning alapú megközelítések
  - Time-series classification általában
 
