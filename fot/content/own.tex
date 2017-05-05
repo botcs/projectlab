@@ -20,4 +20,15 @@ Also, to improve the model's efficiency I applied queues after different entry p
 
 \subsection{Data standardization}
 
-The biggest obstacles at first sight in using TensorFlow are the Tensors and the Flows themselves.
+The biggest obstacles at first sight in using TensorFlow are the Tensors and the (control) Flow itself. In order to deploy a model we have to first assemble its computational graph, which will be compiled at run-time so it can be fed with real NumPy arrays and evaluated in the most efficient way relying on the TensorFlow backend.
+
+Knowing that any time we feed values in, and retreive values from Tensors the whole process has to switch back and forth between C++/CUDA backend and the Python interface, which in case of large arrays is computationally expensive, and possibly collapse the parallel processes to sequential evaluation causing unnecessary run-time overhead, making TensorFlow seemingly inefficient.
+In order to achieve best performance we have decrease the number of python API calls of Tensor evaluation, to let the backend order its computations in one run.
+
+Special case of reducing calls is to discard the notorius use of placeholders \cite{placeholder-remove-MEDIUM-blog}, and introduce Queues to the model.
+TensorFlow comes with a handful of convenience functions and wrappers which can handle data loading and preprocessing in parallel threads, controlled by a native thread coordinator.
+These operators can be built in the graph without actually loading the data, and provide Tensor outputs which instead of placeholders will feed the network automatically on evaluation, so we can forget the 'feed_dict'.
+By using queues we can ensure that the main training process is running continously by chopping minibatches off the queues' front while new samples are fed back to the other end, possibly on different devices and multiple threads.
+As a result the main process will not starve on input data, neither will be continously interrupted by Python calls to simply just transfer values from the API to the backend.
+
+For the reasons above I prepared a 'writer.py' script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, '.TFRecord'. These files can be managed more easily and preserve the sufficient data in a compact way.
