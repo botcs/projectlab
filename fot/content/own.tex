@@ -1,0 +1,23 @@
+\section{My commitments to the project}
+
+I aim to generalize this writing and be less specific about the exact project we are working on, so the following experiences can be transferred to other fields of otherwise non related studies.
+Basically our task was a simple classification problem for time samples of various length.
+My task was not just to try out famous Machine Learning concepts which \it{may} work, but to support our research group with the necessary backend of the experiments carried out, and to integrate different results in the final unified model.
+
+\subsection{Environment}
+
+For doing so I vouched for using TensorFlow environment, in which I had previous experience \cite{github-projects}.
+For our project we started by applying different previously proven to be succesful feature extraction methods, and for introducing Deep Learning we wanted to improve our progress by building on top of these features.
+So in the first step I had to break down the recent DL architectures I wanted to use to basic modules.
+When reimplementing them I paid attention to make spaceholders or entry points for every possible external features my colleagues developed.
+
+Entry points at different level of processing the input can be categorized as the following:
+- Variable length features (i.e. output of filters).
+- Fixed representation features (i.e. variability indices, frequency domain components).
+- Suggestions for classes (i.e. external classifier suggestion)
+
+Also, to improve the model's efficiency I applied queues after different entry points to make mini-batch processing available, by filling these queues independently in mutliple threads, so the network trainer do not have to wait for these external sources to finish their processes to update the network's weights.
+
+\subsection{Data standardization}
+
+The biggest obstacles at first sight in using TensorFlow are the Tensors and the Flows themselves.
