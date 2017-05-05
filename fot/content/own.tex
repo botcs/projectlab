@@ -2,7 +2,7 @@
 
 I aim to generalize this writing and be less specific about the exact project we are working on, so the following experiences can be transferred to other fields of otherwise non related studies.
 Basically our task was a simple classification problem for time samples of various length.
-My task was not just to try out famous Machine Learning concepts which \it{may} work, but to support our research group with the necessary backend of the experiments carried out, and to integrate different results in the final unified model.
+My task was not just to try out famous Machine Learning concepts which \textit{may} work, but to support our research group with the necessary backend of the experiments carried out, and to integrate different results in the final unified model.
 
 \subsection{Environment}
 
@@ -26,9 +26,11 @@ Knowing that any time we feed values in, and retreive values from Tensors the wh
 In order to achieve best performance we have decrease the number of python API calls of Tensor evaluation, to let the backend order its computations in one run.
 
 Special case of reducing calls is to discard the notorius use of placeholders \cite{placeholder-remove-MEDIUM-blog}, and introduce Queues to the model.
+
 TensorFlow comes with a handful of convenience functions and wrappers which can handle data loading and preprocessing in parallel threads, controlled by a native thread coordinator.
-These operators can be built in the graph without actually loading the data, and provide Tensor outputs which instead of placeholders will feed the network automatically on evaluation, so we can forget the 'feed_dict'.
+
+These operators can be built in the graph without actually loading the data, and provide Tensor outputs which instead of placeholders will feed the network automatically on evaluation, so we can forget the \textit{feed dict}.
 By using queues we can ensure that the main training process is running continously by chopping minibatches off the queues' front while new samples are fed back to the other end, possibly on different devices and multiple threads.
 As a result the main process will not starve on input data, neither will be continously interrupted by Python calls to simply just transfer values from the API to the backend.
 
-For the reasons above I prepared a 'writer.py' script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, '.TFRecord'. These files can be managed more easily and preserve the sufficient data in a compact way.
+For the reasons above I prepared a \textit{writer.py} script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, \textit{.TFRecord}. These files can be managed more easily and preserve the sufficient data in a compact way.
