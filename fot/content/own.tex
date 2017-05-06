@@ -36,6 +36,44 @@ These files can be managed more easily, preserve the sufficient data in a compac
 
 To make our experiments standardized, we first separated a train and a test set from the original data in 80-20 ratio, and due to unbalanced entries class representation, I wrote and augmentation script to create an evenly sampled pre-training set with a disjunct train and validation set (80-20), in order to prevent the model from learning a single answer for every sample.
 
+\paragraph{Digital Filter.}
+Since our original approach was built upon modified Pan Tompkins filtering method \cite{pantompkins}.
+When we refactored our code base to use TensorFlow, we approached a great obstacle: there was no previous work involving filters.
+While in SciPy we could reproduce the same results of the original MatLab code \cite{the-original-matlab-code}, the above mentioned problem of feeding external values instead of integrating the process in the computational graph was apparent again.
+We had to decide whether we pre-process all sample before writing the 'TFRecords' files keeping the heavy computing outside of our model, or implement the repeatedly used 'filtfilt' operation, and rewrite the method completely using abstract native TensorFlow Tensors and Op nodes.
+
+Considering that we have to deploy the algorithm in real time inference application, we choose the latter.
+As a first step, my colleagues reimplemented the method using NumPy, that I used as a template to follow while writing a new basic TF operator called 'lfilt'.
+I paid attention to keep the TF policy which is that operators borrowed from SciPy and NumPy should be transparent by function call signature, and the output should behave the same way as in the original implementation.
+
+
+- FeedBack filter components:   $A = a_0, a_1, a_2 \dots a_M$, where $a_0 = 0$ by definition
+- FeedForward filter components:   $B = b_0, b_1, b_2 \dots b_N$
+
+\begin{lstlisting}[language=Python]
+# Lfilt operation definition at time step `t`
+y(t) = x(t)*b(0) + x(t-1)*b(1) + x(t-2)*b(2) ... x(t-M)*b(N)
+                       - y(t-1)*a(1) - y(t-2)*a(2) ... y(t-N)*a(M)
+\end{lstlisting}
+
+$$
+y_t = \sum_{i=0}^{N} x_{t-i} \cdot b_{i} - \sum_{i=1}^{M} y_{t-i} \cdot a_{i}
+$$
+
+
+\begin{lstlisting}[language=Python]
+y(t) = x[t-N : t] * b[::-1] - y[t-M : t-1] * a[::-1]
+\end{lstlisting}
+
+
+for faster computation let $s$ be $s := x \ast b$, where $\ast$ is the convolution operator. This can be evaluated previusly at once since all values of $x$ is known at computation time
+
+\begin{lstlisting}[language=Python]
+y(t) = s[t] - y[y-t : t-1] * a[::-1]
+\end{lstlisting}
+
+As in the SciPy source code we can see \cite{scipy-github}, on lfilt calls both $A$ and $B$ are expected to include the $0^{th}$ parameter as well, which in the feedback operator's case will mean that in the exact computation we have to normalize both $A$ and $B$ by $A_0$ and leave out the $0^{th}$ component from $A$, since it is the corresponding constant of the current $y_t$ value.
+
 \paragraph{Visualization.}
 We always have to keep track, of what we have tried before, and after dozens of runs of experiments it is only up to us what we logged, and how well can we remember.
 To make a decision on future steps in the project it is always useful if we can avoid crawling through a messy git history to find the actual train scripts we wrote, then start to extract the hyperparameters from the code - it uses up a tremendous time, and chances of missing something is very high.
@@ -48,7 +86,7 @@ By utilizing TensorBoard we boosted our progress, because we could easily determ
 INCLUDE GRAPHICS
 
 \paragraph{Fast prototyping.}
-To make our experiments easily reproducible I refactored our network modules to be able to build themselves by just simply using a few high level hyperparameters, just like as number of internal layers, capacity, reduction factor (av/max pooling), etc. and made a template .json file which held these prototype variables, allowing us to use the same training script to build and train a wide variety of different architectures while saving and logging them in high detail to separate directories.
+To make our experiments easily reproducible I refactored our network modules to be able to build themselves by just simply using a few high level hyperparameters, just like as number of internal layers, capacity, reduction factor (av/max pooling), etc. and made a template \texttt{.json} file which held these prototype variables, allowing us to use the same training script to build and train a wide variety of different architectures while saving and logging them in high detail to separate directories.
 
 When servers with multiple GPUs are available, we can also boost our fine-tuning phase, with running trainings on parallel threads.
 By default a single TensorFlow session allocates the whole GPU source, even if the graph is not able to use but a single unit.
