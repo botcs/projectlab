@@ -1,15 +1,15 @@
-Workgroup's abstract:
-
-"We have developed an algorithm combining machine learning a handcrafted
+We have developed an algorithm combining machine learning and handcrafted
 features with medical relevances.
 
-Our method combines the popular approaches of convolutional (CNN) and recurrent
-neural networks (RNN), these state of the art methods are providing a set of
-deep learning features, which are extended by two sets of handcrafted features
-coming from traditionaly applied method like the variability indices of the Pan
-Tompkins algorithm and Fourier descriptors.
+Our method exploit the benefits of recent approaches such as convolutional (CNN) and recurrent neural networks (RNN).
+These state of the art methods are providing a set of learned features, which are extended by two sets of handcrafted features coming from traditionally applied method like the variability indices of the Pan Tompkins algorithm and frequency domain analysis.
 
-Our architecture consist of three main parts: 1, Machine learning part using a
+%We hope that by enhancing professionals' static descriptors with deep learning feature extractors we will be able to
+
+
+Our architecture consist of three main parts:
+
+1, Machine learning part using a
 convolutional neural network for initial feature extraction, reserving the
 temporal aspects of the data. These initial, temporal features are fed into a
 Long short-term memory which handles the temporal aspects of the data and
@@ -17,19 +17,21 @@ generates a feature vector with fixed length.
 
 2, One set of features is based on the Pan Tompkins algorithm to identify the
 characteristic QRS descriptors of the data. The variance of the detected QRS
-positions along with other indices (e.g. variabilitiy of P and T wave
+positions along with other indices (e.g.\ variability of P and T wave
 detections) which describe the morphology of the whole cardiac cycle better are
 also used in the classification.
 
 3, The last set of handcrafted features uses Fourier descriptors of the data.
-The Fourier domain of the training data was analysed and those frequencies which
+The Fourier domain of the training data was analyzed and those frequencies which
 show a large difference between normal and fibrillation cases were selected. The
 biological relevance of the selected frequencies was examined and advised by
 cardiologists.
+%
+% In the current implementation we concatenate the feature vectors coming from the
+% three previously described parts and these features are classified by a fully
+% connected neural network. The initial network with random weights was tested and
+% the optimization of the parameters of the algorithm (e.g.\ complexity of the CNN
+% and RNN part) is ongoing. The algorithm was implemented in TensorFlow and
+% exploits the multi-parallel architecture of GP-GPUs."
 
-In the current implementation we concatenate the feature vectors coming from the
-three previously described parts and these features are classified by a fully
-connected neural network. The initial netwrok with random weights was tested and
-the optimization of the paramteres of the algorithm (e.g.: complexity of the CNN
-and RNN part) is ongoing. The algorithm was implemented in Tensorflow and
-exploits the multi-parallel architecture of GP-GPUs."
+\textit{\textbf{Keywords: deep learning, residual network, fully convolutional network, time series, recurrent network, reverse engineering}}
