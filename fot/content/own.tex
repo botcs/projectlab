@@ -2,10 +2,9 @@
 
 I aim to generalize this writing and be less specific about the exact project we are working on, so the following experiences can be transferred to other fields of otherwise non related studies.
 Basically our task was a simple classification problem for time samples of various length.
-My task was not just to try out famous Machine Learning concepts which \it{may} work, but to support our research group with the necessary backend of the experiments carried out, and to integrate different results in the final unified model.
+My task was not just to try out famous Machine Learning concepts which \textit{may} work, but to support our research group with the necessary backend of the experiments carried out, and to integrate different results in the final unified model.
 
-\subsection{Environment}
-
+\paragraph{Environment.}
 For doing so I vouched for using TensorFlow environment, in which I had previous experience \cite{github-projects}.
 For our project we started by applying different previously proven to be succesful feature extraction methods, and for introducing Deep Learning we wanted to improve our progress by building on top of these features.
 So in the first step I had to break down the recent DL architectures I wanted to use to basic modules.
@@ -18,8 +17,7 @@ Entry points at different level of processing the input can be categorized as th
 
 Also, to improve the model's efficiency I applied queues after different entry points to make mini-batch processing available, by filling these queues independently in mutliple threads, so the network trainer do not have to wait for these external sources to finish their processes to update the network's weights.
 
-\subsection{Data standardization}
-
+\paragraph{Data standardization.}
 The biggest obstacles at first sight in using TensorFlow are the Tensors and the (control) Flow itself. In order to deploy a model we have to first assemble its computational graph, which will be compiled at run-time so it can be fed with real NumPy arrays and evaluated in the most efficient way relying on the TensorFlow backend.
 
 Knowing that any time we feed values in, and retreive values from Tensors the whole process has to switch back and forth between C++/CUDA backend and the Python interface, which in case of large arrays is computationally expensive, and possibly collapse the parallel processes to sequential evaluation causing unnecessary run-time overhead, making TensorFlow seemingly inefficient.
@@ -33,4 +31,25 @@ These operators can be built in the graph without actually loading the data, and
 By using queues we can ensure that the main training process is running continously by chopping minibatches off the queues' front while new samples are fed back to the other end, possibly on different devices and multiple threads.
 As a result the main process will not starve on input data, neither will be continously interrupted by Python calls to simply just transfer values from the API to the backend.
 
-For the reasons above I prepared a \textit{writer.py} script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, \textit{.TFRecord}. These files can be managed more easily and preserve the sufficient data in a compact way.
+For the reasons above I prepared a \textit{writer.py} script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, \textit{.TFRecord}.
+These files can be managed more easily, preserve the sufficient data in a compact way \cite{tf-records-howto}, and the most important part, they can be automatically transformed into Tensors.
+
+To make our experiments standardized, we first separated a train and a test set from the original data in 80-20 ratio, and due to unbalanced entries class representation, I wrote and augmentation script to create an evenly sampled pre-training set with a disjunct train and validation set (80-20), in order to prevent the model from learning a single answer for every sample.
+
+\paragraph{Visualization.}
+We always have to keep track, of what we have tried before, and after dozens of runs of experiments it is only up to us what we logged, and how well can we remember.
+To make a decision on future steps in the project it is always useful if we can avoid crawling through a messy git history to find the actual train scripts we wrote, then start to extract the hyperparameters from the code - it uses up a tremendous time, and chances of missing something is very high.
+
+To make debugging, optimization, and workgroup meetings productive, I used TensorBoard, that is able to read native TensorFlow log or \textit{summary} files and automatically turns them into spectacular graphs \ref{TFgraph}, and quantitative metrics \ref{TFscore}.
+The more explicit name and variable scopes we include in our code the more detailed the resulting graph and scorings will be.
+
+By utilizing TensorBoard we boosted our progress, because we could easily determine if a training should be stopped because the network collapsed, track down which layer was causing this failure by investigating the forward and backward pass of activations and gradients, the distribution of the models variables grouped by layers - all in all whether an experiment branch should be further investigated or not.
+
+INCLUDE GRAPHICS
+
+\paragraph{Fast prototyping.}
+To make our experiments easily reproducible I refactored our network modules to be able to build themselves by just simply using a few high level hyperparameters, just like as number of internal layers, capacity, reduction factor (av/max pooling), etc. and made a template .json file which held these prototype variables, allowing us to use the same training script to build and train a wide variety of different architectures while saving and logging them in high detail to separate directories.
+
+When servers with multiple GPUs are available, we can also boost our fine-tuning phase, with running trainings on parallel threads.
+By default a single TensorFlow session allocates the whole GPU source, even if the graph is not able to use but a single unit.
+So for parallel tests, I wrote a shell program with which we can launch the training with different parameters, automatically reserving the required devices to each training and restricting it from interfering in other processes.
