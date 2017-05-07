@@ -1,9 +1,16 @@
 \chapter{Future}
 
-\section{Short-term plans}
-Continue training with different parameters
-Try to evaluate samples by plotting them first
+\paragraph{Short-term plans.}
+First, we are testing hierarchical architectures: whether we should share weights between models, train them separately or in one session etc.
+When the best candidates are found, we continue fine-tuning them by exploring hyper-parameter space.
 
-\section{Long-term plans}
-Utilize OneShot learning to tackle the small-train set problem.
-Implement DANN training to transfer our best model's trained parameters to real world applications which may introduce different sample density.
+Our following task will be utilizing One Shot learning~\cite{santoro_one-shot_2016, vinyals_matching_2016} to tackle the small-train set problem.
+
+In the meantime, we intend to submit multiple entries trained and selected with different preconditions and different evaluation methods, in order to find out how well our scoring system represents the real performance.
+
+
+\paragraph{Long-term plans.}
+We would like to implement Domain Adversarial training of Neural Networks (DANN)~\cite{ganin_domain-adversarial_2015} to transfer our best model's trained parameters to real world applications which may introduce different sample density.
+
+After successfully training our final model, we intend to use the convolutional layers as feature extractors in reverse engineering to find out if we can help cardiologists by providing them ECG patterns our network used as a guideline for classification.
+For doing so we have multiple choices: we can utilize DeConv nets~\cite{zeiler2014visualizing}, or apply gradient ascension~\cite{yosinski2015understanding} on the receptive field of perceptrons, or simply take the mean of windows in samples that yields the largest activation in the latent feature representation.
