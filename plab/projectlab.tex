@@ -39,13 +39,7 @@
 %\makeatletter
 %\renewcommand\fnum@lstlisting{\ifx\lst@@caption\@empty\else\thelstlisting.~\fi\lstlistingname}%
 %\makeatother
-% Nyilatkozathoz két parancs definíciója
-\newcommand{\pushtobottom}{\vspace*{\fill}}
-\newcommand{\signatureline}[1]{\begin{flushright}
-	\vspace*{.5cm}\par\noindent\makebox[2.5in]{\hrulefill}
-	\par\noindent\makebox[2.5in][c]{#1}
-	\end{flushright}
-}
+
 
 % reference
 \usepackage[plain]{fancyref}
@@ -71,13 +65,17 @@ the PhysioNet --- Computing in Cardiology Challenge 2017
 
 \usepackage{titlesec}
 %
-% % Chapter customization
-% \renewcommand\thesection{\arabic{section}}
-% \setcounter{secnumdepth}{3}
-%
-% \titleformat{\chapter}[block]
-%   {\normalfont\Huge\bfseries}{\thechapter.}{1em}{\huge}
-% %\titleformat{\subsection}[block]
+% Chapter customization
+\renewcommand\thesection{\arabic{section}}
+\setcounter{secnumdepth}{1}
+
+\titleformat{\chapter}[block]
+  {\normalfont\Huge\bfseries}{\thechapter.}{1em}{\huge}
+
+\titleformat{\section}[block]
+  {\normalfont\large\bfseries}{}{1em}{}
+
+%\titleformat{\subsection}[block]
 
 % For quotes
 \usepackage{epigraph}
@@ -106,10 +104,10 @@ Advisor: PhD.\ István Z. Reguly \\
 
 
 \pagenumbering{Roman}
-\section*{Abstract}
+\chapter*{Abstract}
 \input{content/abstract}
-\addcontentsline{toc}{section}{Abstract}
-
+\addcontentsline{toc}{chapter}{Abstract}
+\clearpage
 \pagenumbering{arabic}
 \input{content/introduction}
 %% BEVEZETÉS
