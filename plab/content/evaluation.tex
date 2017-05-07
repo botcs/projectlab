@@ -1,5 +1,15 @@
 \chapter{Evaluation}
 
+The best practice on evaluating the classifier model's performance is to simply compare the number of matching labels evaluated on a completely disjunct set of samples from the training set.
+However in our case it was not so trivial to score different methods, since by simply answering \textit{normal} to every sample would yield 50+\% success rate, therefore it would be less representative.
+
+\section{confusion matrix}
+Instead we are using an extended version of precision-recall evaluation, namely we apply a \textit{confusion matrix}, where every row represents a histogram of the correct label, and every column represents the predictions of our model. The diagonal elements show how many labels match, but it preserves the distribution between classes.
+Using this method, we can easily track down when a training routine collapses, and the network is only using a few of the available classes. When the diagonal elements over number the off diagonals, then the network has been succesfully trained. For instances of the confusion matrix see Figure \ref{fig:confmatrix}.
+By reducing the matrix to a single scalar defined on the website of AF Challenge, we get an accuracy value, which tells us the exact score we would obtain by submitting an official entry on behalf of our research group.
+
+\textbf{INCLUDE CONF MAT}
+
 Evaluation of modells:
 
 Separating the given set to -> train/eval/test
