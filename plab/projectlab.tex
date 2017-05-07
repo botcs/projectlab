@@ -70,14 +70,14 @@ the PhysioNet --- Computing in Cardiology Challenge 2017
 \date{2017}
 
 \usepackage{titlesec}
-
-% Chapter customization
-\renewcommand\thesection{\arabic{section}}
-\setcounter{secnumdepth}{2}
-
-\titleformat{\chapter}[block]
-  {\normalfont\Huge\bfseries}{\thechapter.}{1em}{\huge}
-%\titleformat{\subsection}[block]
+%
+% % Chapter customization
+% \renewcommand\thesection{\arabic{section}}
+% \setcounter{secnumdepth}{3}
+%
+% \titleformat{\chapter}[block]
+%   {\normalfont\Huge\bfseries}{\thechapter.}{1em}{\huge}
+% %\titleformat{\subsection}[block]
 
 % For quotes
 \usepackage{epigraph}
@@ -106,7 +106,7 @@ Advisor: PhD.\ István Z. Reguly \\
 
 
 \pagenumbering{Roman}
-\section{abstract}
+\section*{Abstract}
 \input{content/abstract}
 \addcontentsline{toc}{section}{Abstract}
 
@@ -131,8 +131,9 @@ Advisor: PhD.\ István Z. Reguly \\
 \clearpage
 %\addcontentsline{toc}{chapter}{List of Figures}
 %\clearpage
+\tableofcontents
 \printbibliography
-%\addcontentsline{toc}{chapter}{Bibliography}
+\addcontentsline{toc}{chapter}{Bibliography}
 \clearpage
 %% BEFEJEZÉS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
