@@ -14,3 +14,5 @@ We would like to implement Domain Adversarial training of Neural Networks (DANN)
 
 After successfully training our final model, we intend to use the convolutional layers as feature extractors in reverse engineering to find out if we can help cardiologists by providing them ECG patterns our network used as a guideline for classification.
 For doing so we have multiple choices: we can utilize DeConv nets~\cite{zeiler2014visualizing}, or apply gradient ascension~\cite{yosinski2015understanding} on the receptive field of perceptrons, or simply take the mean of windows in samples that yields the largest activation in the latent feature representation.
+
+Finally, the device that was used to record the original samples will be commercially available soon, and it is a great opportunity for us to write the inner mechanism of a real life, end-to-end product which is the goal of the AF Challenge 2017.

@@ -1,13 +1,13 @@
 \chapter{Models}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=.8\textwidth]{method}\label{fig:method}
+  \includegraphics[width=\textwidth]{method}\label{fig:method}
   \caption{We believe that our best chance to classify samples properly is that we learn how to separate \textit{valid} and \textit{noisy} data from one-another --- since the model will not be forced then to be able to recognize delicate patterns which could indicate heart failure along with harsh noise patterns. In order to avoid overfitting on the small train set of a few hundred samples, instead simply training a binary classifier network, we are working hard to filter these noisy samples by other handcrafted approaches. Next, the sample should be categorized as a healthy or an unhealthy ECG. As a final step, we are training a network to distinguish atrium fibrillation from other ill ECG. During the training process the different part of the model are trained separately only on their own domain, and after descending below a certain error rate, we assemble the model.}
 \end{figure}
 
-As mentioned before, we intended to exploit the late success of neural networks that offers a plenty of methods and architectures --- and a few rule of thumbs to keep in mind when preparing the blueprint.
+As mentioned before, we intended to exploit the late success of neural networks that offers a plenty of methods and architectures --- and a few rules of thumb to keep in mind when preparing the blueprint.
 Currently we are experimenting with hierarchical classification models.~\ref{fig:method}
-At the time of writing I will describe the main building blocks we have tried before, and present the baseline our recent tests are based upon.
+At the time of writing I will describe the main building blocks we have tried so far, and present the baseline our recent tests are based upon.
 My role in the group is to implement and maintain the deep learning back-end, also to integrate the hand crafted features, and carry out experiments and evaluate them to determine which combination leads to the most successful architecture.
 
 \section{Variable length representation}
