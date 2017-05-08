@@ -1,17 +1,17 @@
 We have developed an algorithm combining machine learning and handcrafted
 features with medical relevances.
-Our architecture consist of three main parts:
+Our architecture consists of three main parts:
 
 \paragraph{Deep Learning.} using a
-convolutional neural network for initial feature extraction, reserving the
+convolutional neural network for initial feature extraction, preserving the
 temporal aspects of the data. These time dependent features are fed into
 the recurrent network which handles the temporal aspects of the data and
 generates a feature vector with fixed length.
 
 \paragraph{QRS complex filtering.}
 Another set of features is based on the Pan Tompkins algorithm to identify the
-characteristic QRS descriptors of the data. The variance of the detected QRS
-positions along the variability index of P and T waves, which describe the morphology of the whole cardiac cycle, are also used in the classification.
+characteristic wave descriptors (QRS complexes) of the data.
+The variance of the detected wave complex positions along the variability index of P and T waves, which describe the morphology of the whole cardiac cycle, are also used in the classification.
 
 \paragraph{Frequency domain analysis.} The last set of handcrafted features uses Fourier descriptors of the data.
 The Fourier domain of the training data was analyzed and those frequencies which
