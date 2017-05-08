@@ -1,3 +1,20 @@
-\section{Benchmark of \texttt{filtfilt}}
+\chapter{Benchmark of \texttt{filtfilt}}
 
-TODO.
+In order to verify that my implementation of the \texttt{filtfilt} operator in TensorFlow is better for large scale applications than the publicly available state-of-the art method found in \texttt{SciPy.signal module}~\cite{scipy}, I attempted to measure the time required for evaluation.
+For benchmarking purposes I used random sequences sampled from standard normal distribution.
+
+I have prepared multiple test runs, where I compare the two methods by evaluation time concerning the sample length, the number of filters applied and the number of samples.
+
+\section{Single sample - Single filter with different sample lengths}
+In the first comparison the TensorFlow implementation performs poorly, I had to apply different $y$ label ticks.
+The reason for this result, is that the implementation uses GPU acceleration via TensorFlow CUDA kernels, and the mobilization of the data (copying into the graphic memory, and copying the result out from it) takes more time than actually executing the operation.
+Moreover, currently the TensorFlow backend does not support mutable \texttt{tf.Variables} inside native iterative loops (\texttt{tf.while_loop}), meaning that we cannot modify specific values by indexing an immutable \texttt{tf.Tensor}.
+In other words, \texttt{tf.Tensor} is the only interface for the inner body of the while loop that can communicate with external graph nodes.
+Technically this yields, that the fixed size array of values cannot be allocated before the execution of an iteration, because the resulting space can only be handled by an interface that does not support element modification.
+As a transient solution I had to include array concatenation, so in every step $t$ the array of previous outputs $[y_{1}, y_{t-1}]$ has to be concatenated to the current $y_t$ output value, resulting in memory expensive operations.
+
+\textbf{NVIDIA-benchmark jól nézne ki}.
+
+\section{Batch of samples - Single filter run, with same length samples}
+
+\section{Batch of samples - sample size}

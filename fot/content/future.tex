@@ -1,4 +1,4 @@
-\section{Future}
+\chapter{Future}
 
 \paragraph{Inference.}
 When a reliable result is ready, with the saved weights and parameters we can transfer it to a simplified model, where we discard the auto differentation and back-propagation function in order to speed up the evaluation.
@@ -6,3 +6,6 @@ In our situation, in inference time we are not allowed to use batch processing.
 The current solution requires to compile a specific model and load it's weights from previous training session, to infer a single sample - then every object is destroyed until the next inference call is made.
 To solve this problem, we intend to create a template that can do the necessary steps mentioned above with any kind of our model, after that it should run in the background and stay in idle state (rather than exiting the process) until a new sample is provided.
 We believe that the mentioned solution will radically reduce our inference time.
+
+\paragraph{Filter}
+My next plan is improving the \texttt{lfilt} and the \texttt{filtfilt} operation by implementing on lower level, considering contribution to the open source library.

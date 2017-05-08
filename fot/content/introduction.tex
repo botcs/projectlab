@@ -1,6 +1,12 @@
-\section{Introduction}
+\chapter{Introduction}
 
-Focusing on recent succes of different Deep Learning architectures, one can get easily intimidated to implement them for individual purposes.
+\paragraph{Motivation.}
+Currently I am working in a research group, where my task is to design, implement and maintain the Deep Learning background of our experiments.
+At the time of writing we are working on a classification task, where a moderate set of labeled, different length, single channel ECG (Electro Cardio Gram) samples are provided.
+Our task is to research the main patterns which can indicate, or even predict the occurrence of a common cardiac failure, called atrium fibrillation.
+The greatest challenge in this task is the small number and the unbalanced distribution of entries between classes.
+
+Focusing on recent success of different Deep Learning architectures, one can get easily intimidated to implement them for individual purposes.
 However many experiments are failing due to wrong choice of models, or not being able to track down the right hyperparameters.
 There is no theorem (yet) for answering whether a network will converge or not, even if it does so, it may fall in a local minima of the search space, that is not satisfactory.
 Following thumb rules~\cite{thumbrules?}, can reduce our search space, still we have to be able to track our progress, and make every experiments reproduceable.
