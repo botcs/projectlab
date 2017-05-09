@@ -37,7 +37,7 @@ The actual convolutional layers of our FCN models are following the pattern:
 
 Where BatchNorm is described in~\cite{ioffe_batch_2015}, and ReLU is the rectified linear unit (nonlinear) activation function, and $w$ indicates the window size of the pooling operation (the stride was set to the same value as well).
 Hyper-parameters of this convolutional layer are hidden in the dimensions of  $\mathbf{K}\rightarrow$ \texttt{[IN, OUT, k]}, where \texttt{IN} is fixed, \texttt{OUT} represents how many feature maps will be created by the convolution operation, and \texttt{k} is how large the kernel will be, i.e. how large the receptive field will this layer have on $x$.
-These layers were assembled in the depicted manner on \ref{fig:baseline} (top row).
+These layers were assembled in the depicted manner on Figure \ref{fig:baseline} (top row).
 
 \begin{figure}
   \centering
@@ -75,12 +75,12 @@ Due to the large number of task specific hyper-parameters in LSTMs and GRUs the 
 
 \section{Augmentation and transfer learning}
 Despite the initial difficulties with RNN, I began to experiment as a spinoff project to apply RNN as a time series predictor, training it to predict the following $N$ values of the measurements based on the previous parts of the sample. I believe that this model can be reused to initialize training classifier recurrent networks, instead of random initialization.
-On the other hand, by feeding back the network its own predictions we could produce data \ref{fig:rnn-aug}. The network in this case would function as some sort of "language model"~\cite{lang-model} of ECG signals - and if trained properly, i.e. on a single class, it would output labeled, yet totally artificial samples, which could be used as augmented training data as well.
+On the other hand, by feeding back the network its own predictions we could produce data \ref{fig:rnn-aug}. The network in this case would function as some sort of "language model"~\cite{mikolov_recurrent_2010} of ECG signals - and if trained properly, i.e. on a single class, it would output labeled, yet totally artificial samples, which could be used as augmented training data as well.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{rnn-aug}
-  \caption{Artificial sample produced by an LSTM trained to predict and continue original ECG samples. In this case the network functions as some sort of language model of ECG. Among many samples, professionals could not tell whether samples produced by this method were artificial or taken from the original training set. Truth on being told, after further analysis they could detect artifacts, still some said that a very ill patient could produce the same samples. \textbf{TODO: provide more samples, or an original sample to let the reader decide which is which.}}
+  \includegraphics[width=\textwidth]{normal-rnn}
+  \caption{Artificial sample produced by an LSTM trained to predict and continue original ECG samples. Left: an AF Challenge 2017 entry classified as \textit{normal}. Right: ECG sequence produced by a network trained on exclusively \textit{normal} samples. In this case the network functions as some sort of language model of ECG. Among many samples, professionals could not tell whether samples produced by this method were artificial or taken from the original training set. Truth on being told, after further analysis they could detect artifacts, still some said that a very ill patient could produce the same samples. Image credits: Wikimedia, Adventure Time.}
   \label{fig:rnn-aug}
 \end{figure}
 

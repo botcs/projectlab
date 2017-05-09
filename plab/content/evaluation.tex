@@ -19,7 +19,7 @@ By reducing the matrix to a single scalar defined on the website of AF Challenge
 In order to keep track of how well our model generalized the features, and to avoid over-fitting, the original downloaded samples were separated into three sets.
 First we selected 20\% of every class to keep it as a \textbf{test} set.
 As a next step, the remaining 80\% were fed to an augmentation algorithm that added additive and multiplicative noise sampled from normal distribution biased to match the moment of each individual sample, and re-sampled each class' randomly selected entries to make an even distribution between classes.
-Finally the augmented data was separated into a train and evaluation set in an 80-20 ratio.
+Finally the augmented data was separated into \textbf{train} and \textbf{evaluation} set in an 80-20 ratio.
 We use evaluation set to keep track how our model performs on unseen data.
 Different \textit{training policies} modify learning rate, perturb the network parameters, or early stopping when over-fit occurs for given number of consecutive iterations.
 
@@ -45,7 +45,7 @@ We made sure that discarding the sample specific frequency has no significant re
   \centering
   \includegraphics[width=\textwidth]{bpm_violin}
   \caption{The heart rate distribution and variance between classes is similar (except of cases in Noise class where the heart beat detection algorithm fails to find the R waves, thus resulting in extreme values, which we intend to filter before the entry reaches the valid sample classifiers), so discarding the average heart rate by normalizing every sample by the value, presumably would not affect negatively the performance of our network.}
-  \label{violin}
+  \label{fig:violin}
 \end{figure}
 
 
