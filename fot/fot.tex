@@ -13,7 +13,8 @@
 %\usepackage{mathtools}                                     % képletekhez kell
 \usepackage[backend=biber, sorting=anyt]{biblatex}           % bibliográfia
 \usepackage{parskip}
-\addbibresource{projectlab.bib}
+\addbibresource{fot.bib}
+\addbibresource{zotero.bib}
 \usepackage{url}
 \usepackage{enumitem}
 \usepackage{amsmath}
@@ -121,6 +122,10 @@ Advisor: PhD.\ István Z. Reguly \\
 \chapter{Abstract}
 \input{content/abstract}
 \addcontentsline{toc}{chapter}{Abstract}
+\clearpage
+\tableofcontents
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
 
 \pagenumbering{arabic}
 \input{content/introduction}
@@ -139,14 +144,7 @@ Advisor: PhD.\ István Z. Reguly \\
 
 \input{content/future}
 \clearpage
-
-\listoffigures
-\addcontentsline{toc}{chapter}{List of Figures}
-\clearpage
-
 \printbibliography
-\addcontentsline{toc}{chapter}{Bibliography}
-\clearpage
 %% BEFEJEZÉS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
