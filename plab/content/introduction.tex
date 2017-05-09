@@ -22,13 +22,13 @@ We had several discussions in the early phase of development with professionals 
 The difference depicted in details on Figure ~\ref{fig:pie}.
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=0.8\textwidth]{trivial}
+  \includegraphics[width=\textwidth]{trivial}
   \caption{The depicted ECG signal was originally classified as a \textit{normal} sample, later revised to \textit{noisy}.}
   \label{fig:trivial}
   \vspace*{\floatsep}
 
   \centering
-  \includegraphics[width=0.8\textwidth]{pie}
+  \includegraphics[width=\textwidth]{pie}
   \caption{The differences between the original (left) and the revised (right) ground truth labels. According to the latest update, the noise class is still underrepresented, and still it is very likely that any model trying to discriminate noisy samples will be too simple to classify them all correctly, or with larger capacity will be over-fitted.}
   \label{fig:pie}
 \end{figure}

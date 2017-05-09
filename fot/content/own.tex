@@ -78,24 +78,30 @@ As in the SciPy source code we can see~\cite{noauthor_scipy/scipy_nodate}, on lf
 We always have to keep track, of what we have tried before, and after dozens of runs of experiments it is only up to us what we logged, and how well can we remember.
 To make a decision on future steps in the project it is always useful if we can avoid crawling through a messy git history to find the actual train scripts we wrote, then start to extract the hyperparameters from the code - it uses up a tremendous time, and chances of missing something is very high.
 
-To make debugging, optimization, and workgroup meetings productive, I used TensorBoard, that is able to read native TensorFlow log or \textit{summary} files and automatically turns them into spectacular graphs \ref{fig:tf-graph}, and quantitative metrics \ref{fig:tf-score}.
+To make debugging, optimization, and workgroup meetings productive, I used TensorBoard, that is able to read native TensorFlow log or \textit{summary} files and automatically turns them into spectacular graphs (see Figure \ref{fig:tf-graph} and \ref{fig:hist}), and quantitative metrics (see Figure \ref{fig:tf-score}).
 The more explicit name and variable scopes we include in our code the more detailed the resulting graph and scorings will be.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{tf-graph}
-  \caption{We believe that our best chance to classify samples properly is that we learn how to separate \textit{valid} and \textit{noisy} data from one-another --- since the model will not be forced then to be able to recognize delicate patterns which could indicate heart failure along with harsh noise patterns. In order to avoid overfitting on the small train set of a few hundred samples, instead simply training a binary classifier network, we are working hard to filter these noisy samples by other handcrafted approaches. Next, the sample should be categorized as a healthy or an unhealthy ECG. As a final step, we are training a network to distinguish atrium fibrillation from other ill ECG. During the training process the different part of the model are trained separately only on their own domain, and after descending below a certain error rate, we assemble the model.}
+  \caption{Left: Inner structure of a FCN. Right: The \textit{Confusion Matrix} operator is build using elementary TensorFlow operations.}
   \label{fig:tf-graph}
 \end{figure}
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{hist}
+  \caption{Using histograms we can keep track of our model's progress during the training session. We may look for local pikes in the distribution of the layers' weights, or biasing toward a specific mean through time.}
+  \label{fig:hist}
+\end{figure}
 
-\begin{figure}
+\begin{figure}[h]
   \centering
   \begin{floatrow}
     \ffigbox[\FBwidth]{\caption{Performance test of Deep Residual networks}}{%
       \includegraphics[width=.48\textwidth]{resnet-overall}
     }
-    \ffigbox[\FBwidth]{Performance of Fully Convolutional networks}{
+    \ffigbox[\FBwidth]{\caption{Performance of Fully Convolutional networks}}{
       \includegraphics[width=.48\textwidth]{convnet-overall}
     }
   \end{floatrow}
@@ -103,8 +109,6 @@ The more explicit name and variable scopes we include in our code the more detai
 \end{figure}
 
 By utilizing TensorBoard we boosted our progress, because we could easily determine if a training should be stopped because the network collapsed, track down which layer was causing this failure by investigating the forward and backward pass of activations and gradients, the distribution of the models variables grouped by layers - all in all whether an experiment branch should be further investigated or not.
-
-INCLUDE GRAPHICS
 
 \paragraph{Fast prototyping.}
 To make our experiments easily reproducible I refactored our network modules to be able to build themselves by just simply using a few high level hyperparameters, just like as number of internal layers, capacity, reduction factor (av/max pooling), etc. and made a template \texttt{.json} file which held these prototype variables, allowing us to use the same training script to build and train a wide variety of different architectures while saving and logging them in high detail to separate directories.
