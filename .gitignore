@@ -1,3 +1,6 @@
+*.xml
+*.aux
+*.toc
 *.zip
 *.pdf
 *.bak

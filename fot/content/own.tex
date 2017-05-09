@@ -23,7 +23,7 @@ The biggest obstacles at first sight in using TensorFlow are the Tensors and the
 Knowing that any time we feed values in, and retreive values from Tensors the whole process has to switch back and forth between C++/CUDA backend and the Python interface, which in case of large arrays is computationally expensive, and possibly collapse the parallel processes to sequential evaluation causing unnecessary run-time overhead, making TensorFlow seemingly inefficient.
 In order to achieve best performance we have decrease the number of python API calls of Tensor evaluation, to let the backend order its computations in one run.
 
-Special case of reducing calls is to discard the notorius use of placeholders~\cite{placeholder-remove-MEDIUM-blog}, and introduce Queues to the model.
+Special case of reducing calls is to discard the notorius use of placeholders~\cite{noauthor_performance_nodate, noauthor_tensorflow:_nodate}, and introduce Queues to the model.
 
 TensorFlow comes with a handful of convenience functions and wrappers which can handle data loading and preprocessing in parallel threads, controlled by a native thread coordinator.
 
@@ -32,14 +32,14 @@ By using queues we can ensure that the main training process is running continou
 As a result the main process will not starve on input data, neither will be continously interrupted by Python calls to simply just transfer values from the API to the backend.
 
 For the reasons above I prepared a \textit{writer.py} script that takes our raw data files, reads them into memory and write them out in a single file in the suggested file format, \textit{.TFRecord}.
-These files can be managed more easily, preserve the sufficient data in a compact way~\cite{tf-records-howto}, and the most important part, they can be automatically transformed into Tensors.
+These files can be managed more easily, preserve the sufficient data in a compact way~\cite{noauthor_tfrecords_nodate}, and the most important part, they can be automatically transformed into Tensors.
 
 To make our experiments standardized, we first separated a train and a test set from the original data in 80-20 ratio, and due to unbalanced entries class representation, I wrote and augmentation script to create an evenly sampled pre-training set with a disjunct train and validation set (80-20), in order to prevent the model from learning a single answer for every sample.
 
 \paragraph{Digital Filter.}
-Since our original approach was built upon modified Pan Tompkins filtering method~\cite{pantompkins}.
+Since our original approach was built upon modified Pan Tompkins filtering method~\cite{pan1985real}.
 When we refactored our code base to use TensorFlow, we approached a great obstacle: there was no previous work involving filters.
-While in SciPy we could reproduce the same results of the original MatLab code~\cite{the-original-matlab-code}, the above mentioned problem of feeding external values instead of integrating the process in the computational graph was apparent again.
+While in SciPy we could reproduce the same results of the original MatLab code~\cite{noauthor_complete_nodate}, the above mentioned problem of feeding external values instead of integrating the process in the computational graph was apparent again.
 We had to decide whether we pre-process all sample before writing the 'TFRecords' files keeping the heavy computing outside of our model, or implement the repeatedly used 'filtfilt' operation, and rewrite the method completely using abstract native TensorFlow Tensors and Op nodes.
 
 Considering that we have to deploy the algorithm in real time inference application, we choose the latter.
@@ -72,14 +72,35 @@ for faster computation let $s$ be $s := x \ast b$, where $\ast$ is the convoluti
 y(t) = s[t] - y[y-t : t-1] * a[::-1]
 \end{lstlisting}
 
-As in the SciPy source code we can see~\cite{scipy-github}, on lfilt calls both $A$ and $B$ are expected to include the $0^{th}$ parameter as well, which in the feedback operator's case will mean that in the exact computation we have to normalize both $A$ and $B$ by $A_0$ and leave out the $0^{th}$ component from $A$, since it is the corresponding constant of the current $y_t$ value.
+As in the SciPy source code we can see~\cite{noauthor_scipy/scipy_nodate}, on lfilt calls both $A$ and $B$ are expected to include the $0^{th}$ parameter as well, which in the feedback operator's case will mean that in the exact computation we have to normalize both $A$ and $B$ by $A_0$ and leave out the $0^{th}$ component from $A$, since it is the corresponding constant of the current $y_t$ value.
 
 \paragraph{Visualization.}
 We always have to keep track, of what we have tried before, and after dozens of runs of experiments it is only up to us what we logged, and how well can we remember.
 To make a decision on future steps in the project it is always useful if we can avoid crawling through a messy git history to find the actual train scripts we wrote, then start to extract the hyperparameters from the code - it uses up a tremendous time, and chances of missing something is very high.
 
-To make debugging, optimization, and workgroup meetings productive, I used TensorBoard, that is able to read native TensorFlow log or \textit{summary} files and automatically turns them into spectacular graphs \ref{TFgraph}, and quantitative metrics \ref{TFscore}.
+To make debugging, optimization, and workgroup meetings productive, I used TensorBoard, that is able to read native TensorFlow log or \textit{summary} files and automatically turns them into spectacular graphs \ref{fig:tf-graph}, and quantitative metrics \ref{fig:tf-score}.
 The more explicit name and variable scopes we include in our code the more detailed the resulting graph and scorings will be.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{tf-graph}
+  \caption{We believe that our best chance to classify samples properly is that we learn how to separate \textit{valid} and \textit{noisy} data from one-another --- since the model will not be forced then to be able to recognize delicate patterns which could indicate heart failure along with harsh noise patterns. In order to avoid overfitting on the small train set of a few hundred samples, instead simply training a binary classifier network, we are working hard to filter these noisy samples by other handcrafted approaches. Next, the sample should be categorized as a healthy or an unhealthy ECG. As a final step, we are training a network to distinguish atrium fibrillation from other ill ECG. During the training process the different part of the model are trained separately only on their own domain, and after descending below a certain error rate, we assemble the model.}
+  \label{fig:tf-graph}
+\end{figure}
+
+
+\begin{figure}
+  \centering
+  \begin{floatrow}
+    \ffigbox[\FBwidth]{\caption{Performance test of Deep Residual networks}}{%
+      \includegraphics[width=.48\textwidth]{resnet-overall}
+    }
+    \ffigbox[\FBwidth]{Performance of Fully Convolutional networks}{
+      \includegraphics[width=.48\textwidth]{convnet-overall}
+    }
+  \end{floatrow}
+  \label{fig:tf-score}
+\end{figure}
 
 By utilizing TensorBoard we boosted our progress, because we could easily determine if a training should be stopped because the network collapsed, track down which layer was causing this failure by investigating the forward and backward pass of activations and gradients, the distribution of the models variables grouped by layers - all in all whether an experiment branch should be further investigated or not.
 

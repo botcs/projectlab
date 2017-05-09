@@ -95,7 +95,7 @@ for biomedical research
 % No page break before chapters
 \usepackage{etoolbox}
 \makeatletter
-\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+%\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
 \makeatother
 
 \begin{document}
@@ -117,15 +117,13 @@ Advisor: PhD.\ István Z. Reguly \\
 \end{center}
 \clearpage
 
-
 \pagenumbering{Roman}
-\chapter{Abstract}
+\chapter*{Abstract}
 \input{content/abstract}
 \addcontentsline{toc}{chapter}{Abstract}
-\clearpage
 \tableofcontents
-\clearpage
 \addcontentsline{toc}{chapter}{Bibliography}
+\clearpage
 
 \pagenumbering{arabic}
 \input{content/introduction}
@@ -133,7 +131,7 @@ Advisor: PhD.\ István Z. Reguly \\
 %% BEVEZETÉS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% TARTALOM
-\input{content/related}
+%\input{content/related}
 
 \input{content/own}
 
