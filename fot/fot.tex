@@ -88,6 +88,15 @@ for biomedical research
 \setlength\epigraphwidth{0.7\textwidth}
 \setlength\epigraphrule{0pt}
 
+% For multi fig in row
+\usepackage{floatrow}
+
+% No page break before chapters
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
 \begin{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BEVEZETÉS
@@ -115,16 +124,19 @@ Advisor: PhD.\ István Z. Reguly \\
 
 \pagenumbering{arabic}
 \input{content/introduction}
+
 %% BEVEZETÉS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% TARTALOM
 \input{content/related}
+
 \input{content/own}
 
 %% TARTALOM
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% BEFEJEZÉS
 \input{content/results}
+
 \input{content/future}
 \clearpage
 

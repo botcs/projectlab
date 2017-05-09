@@ -1,12 +1,13 @@
 \chapter{Models}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{method}\label{fig:method}
+  \includegraphics[width=\textwidth]{method}
   \caption{We believe that our best chance to classify samples properly is that we learn how to separate \textit{valid} and \textit{noisy} data from one-another --- since the model will not be forced then to be able to recognize delicate patterns which could indicate heart failure along with harsh noise patterns. In order to avoid overfitting on the small train set of a few hundred samples, instead simply training a binary classifier network, we are working hard to filter these noisy samples by other handcrafted approaches. Next, the sample should be categorized as a healthy or an unhealthy ECG. As a final step, we are training a network to distinguish atrium fibrillation from other ill ECG. During the training process the different part of the model are trained separately only on their own domain, and after descending below a certain error rate, we assemble the model.}
+  \label{fig:method}
 \end{figure}
 
 As mentioned before, we intended to exploit the recent success of neural networks that offer plenty of methods and architectures --- and a few rules of thumb to keep in mind when preparing the blueprint.
-Currently we are experimenting with hierarchical classification models.~\ref{fig:method}
+Currently we are experimenting with hierarchical classification models, for a quick overview see Figure \ref{fig:method}.
 At the time of writing I will describe the main building blocks we have tried so far, and present the baseline our recent tests are based upon.
 My role in the group is to implement and maintain the deep learning back-end, also to integrate the hand crafted features, and carry out experiments and evaluate them to determine which combination leads to the most successful architecture.
 
@@ -15,45 +16,62 @@ First of all, we have to deal with time dependency. Since we cannot determine ho
 
 \begin{figure}
   \centering
-  \includegraphics[width=.8\textwidth]{FCN}\label{fig:FCN}
+  \includegraphics[width=.8\textwidth]{FCN}
   \caption{Semantic segmentation (bottom) uses the feature extractors from VGG (top), by simply reshaping the fully connected layers into convolutions with local receptive fields. We expect the same behavior when training convolutional networks on one dimensional time series. Image credits~\cite{Long_2015_CVPR}}
+  \label{fig:FCN}
 \end{figure}
 
 \paragraph{Fully Convolutional Networks.}
-Based on the fact that hierarchical feature extractors such as the LeNet~\cite{lecun1995convolutional}, and the VGG~\cite{VGG} are easily trained, reliable, and can be easily restructured for transfer learning purposes~\cite{transfer learning} I decided to re-implement the Fully Convolutional Network~\cite{Long_2015_CVPR} paradigm in one dimension, as motivated by the following works~\cite{mittelman2015time, langkvist2014review}.
+Based on the fact that hierarchical feature extractors such as the LeNet~\cite{lecun1995convolutional}, and the VGG~\cite{simonyan_very_2014} are easily trained, reliable, and can be easily restructured for transfer learning purposes. I decided to re-implement the Fully Convolutional Network~\cite{Long_2015_CVPR} paradigm in one dimension, as motivated by the following works~\cite{mittelman2015time, langkvist2014review}.
 The actual convolutional layers of our FCN models are following the pattern:
-\begin{center}
-  \begin{equation}\label{eq:conv}
+\begin{center}\label{eq:conv}
+  \begin{equation*}
     \begin{split}
       c &= \mathbf{K} \ast x\\
       b &= BatchNorm(c)\\
       h &= ReLU(b)\\
       y &= AvgPool_w(h)
     \end{split}
-  \end{equation}
+  \end{equation*}
 \end{center}
 
-Where BatchNorm is described in~\cite{batchnorm}, and ReLU is the rectified linear unit (nonlinear) activation function, and $w$ indicates the window size of the pooling operation (the stride was set to the same value as well).
+Where BatchNorm is described in~\cite{ioffe_batch_2015}, and ReLU is the rectified linear unit (nonlinear) activation function, and $w$ indicates the window size of the pooling operation (the stride was set to the same value as well).
 Hyper-parameters of this convolutional layer are hidden in the dimensions of  $\mathbf{K}\rightarrow$ \texttt{[IN, OUT, k]}, where \texttt{IN} is fixed, \texttt{OUT} represents how many feature maps will be created by the convolution operation, and \texttt{k} is how large the kernel will be, i.e. how large the receptive field will this layer have on $x$.
 These layers were assembled in the depicted manner on \ref{fig:baseline} (top row).
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{baseline}\label{fig:baseline}
+  \includegraphics[width=\textwidth]{baseline}
   \caption{Image credits~\cite{wang2016time}}
+  \label{fig:baseline}
 \end{figure}
 
 \paragraph{Residual Networks.}
 We also began experimenting with Deep Residual Networks~\cite{he2016deep}, suggested by~\cite{wang2016time}.
 The basic idea is simple: we concatenate several of the above mentioned FCNs after each other, while stabilizing the gradient flow by adding the convolutional blocks' input to their output.
 However the interpretations of why deep residual networks actually work so well are not clear.
-An excellent article on this topic van be found at\cite{resnet-ensembles}.
+An excellent article on this topic van be found at\cite{veit_residual_2016}.
 Oversimplifying, we could say each FCN blocks (in Eq. \ref{eq:conv}) in the model are no longer responsible for detecting every feature, but expected as shallow networks to work together as different ensembles, which allows us to increase the overall capacity of the model.
 
 \section{Fixed length representation}
 Once every filters have been evaluated in the end we can use different approaches: to take the weighted norm or mean of the filtered signal to represent each pattern's presence in the input signal or we can use techniques that have been proven to be successful in natural language processing tasks: recurrent neural networks (RNNs).
 Our first attempt was to use a Long Short Term Memory network (LSTM)~\cite{hochreiter1997long, malhotra2015long}, shortly we switched to its modified version Gated Recurrent Unit network (GRU)~\cite{chung2014empirical}, but we experienced that the network was not capable to overfit the train set, and achieve a satisfactory error rate.
+
 Due to the large number of task specific hyper-parameters in LSTMs and GRUs the search space would exponentially increase, so we decided to continue experimenting with simply reducing the feature map to a single scalar value by mean averaging the activation through time of the feature extractors.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{lstm}
+  \caption{Long Short Term Memory network maintains two state, one hidden, and one output state, and via forget and input gates it offers a solution for training recurrent neural networks with back-propagation through time without exploding/vanishing gradients. Image credit: Chris Olah's blog~\cite{chris_olah_understanding_nodate}}
+  \label{fig:lstm}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{gru-rnn}
+  \caption{Gated Recurrent Unit networks combine forget and input gates into a single update gate. By discarding the output cell state, the result is a simpler model, that is easier to initialize, and train. Image credit: Chris Olah's blog~\cite{chris_olah_understanding_nodate}}
+  \label{fig:gru}
+\end{figure}
 
 \section{Augmentation and transfer learning}
 Despite the initial difficulties with RNN, I began to experiment as a spinoff project to apply RNN as a time series predictor, training it to predict the following $N$ values of the measurements based on the previous parts of the sample. I believe that this model can be reused to initialize training classifier recurrent networks, instead of random initialization.
@@ -61,8 +79,9 @@ On the other hand, by feeding back the network its own predictions we could prod
 
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{rnn-aug}\label{fig:rnn-aug}
+  \includegraphics[width=\textwidth]{rnn-aug}
   \caption{Artificial sample produced by an LSTM trained to predict and continue original ECG samples. In this case the network functions as some sort of language model of ECG. Among many samples, professionals could not tell whether samples produced by this method were artificial or taken from the original training set. Truth on being told, after further analysis they could detect artifacts, still some said that a very ill patient could produce the same samples. \textbf{TODO: provide more samples, or an original sample to let the reader decide which is which.}}
+  \label{fig:rnn-aug}
 \end{figure}
 
 \section{Classification}

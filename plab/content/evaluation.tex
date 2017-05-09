@@ -10,8 +10,9 @@ By reducing the matrix to a single scalar defined on the website of AF Challenge
 
 \begin{figure}
   \centering
-  \includegraphics[width=.8\textwidth]{conf-mat-af}\label{fig:FCN}
+  \includegraphics[width=.8\textwidth]{conf-mat-af}
   \caption{Confusion matrix. Diagonal values represent prediction \textbf{hit}, off-diagonals represent \textbf{miss}. Image credits AF Challenge 2017}
+  \label{fig:FCN}
 \end{figure}
 
 \section{The training set}
@@ -32,7 +33,7 @@ If both were having the same cardiac symptom probably the cardiologist would rec
 This is because the time domain patterns are expressively specific to the patient's heart rate.
 Technically this means, if the atrial fibrillation specific curve would appear in both samples it would probably appear elongated or compressed --- and the model had to learn both patterns as if no similarity would have exist between them.
 This problem could lead to a case where the network would discard some rare feature, in order to reserve the capacity for the trivial pattern just with different lengths.
-\cite{Figure Same pattern different frequency}
+
 \paragraph{Solutions.}
 To counterweight we could increase the capacity of the network, which often leads to significant improvement in performance on the train set, however at the same time as a by-product the performance on validation set decays, since the model is more likely to over-fit, simply remember the train samples, and loses its ability to generalize well.
 The loss is likely to happen since our training set only contains less than 8K samples.
@@ -42,8 +43,9 @@ We made sure that discarding the sample specific frequency has no significant re
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{bpm_violin}\label{violin}
+  \includegraphics[width=\textwidth]{bpm_violin}
   \caption{The heart rate distribution and variance between classes is similar (except of cases in Noise class where the heart beat detection algorithm fails to find the R waves, thus resulting in extreme values, which we intend to filter before the entry reaches the valid sample classifiers), so discarding the average heart rate by normalizing every sample by the value, presumably would not affect negatively the performance of our network.}
+  \label{violin}
 \end{figure}
 
 
@@ -56,5 +58,5 @@ It enables the back-end to train the network with multiple samples at once.
 Both parallel inference and weight adjusting is implemented in the latest machine learning frameworks.
 
 \paragraph{Default optimizer, and other regularization.}
-We are using the current state-of-the art optimizer algorithm ADAM~\cite{kingma_adam:_2014} and DropConnect~\cite{wan_regularization_2013} with $p=0.5$ settings. We also apply weight decay, by adding $L_2$ norm of each $\theta$ in the networks parameters to the overall loss function and use soft labels (perturbed one-hot vectors) in order to prevent the networks from favoring a specific class. 
+We are using the current state-of-the art optimizer algorithm ADAM~\cite{kingma_adam:_2014} and DropConnect~\cite{wan_regularization_2013} with $p=0.5$ settings. We also apply weight decay, by adding $L_2$ norm of each $\theta$ in the networks parameters to the overall loss function and use soft labels (perturbed one-hot vectors) in order to prevent the networks from favoring a specific class.
 Our training policy varies over different settings, currently we are using early stopping method: after 10 consecutive steps where validation performance have not been improved the trainer shuts down, to enable other train routines use the allocated device --- otherwise the models are evaluated after a previously given number of steps. Throughout the training, we decrease exponentially the learning rate, in order to prevent the model from oscillation.
